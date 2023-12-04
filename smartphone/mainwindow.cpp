@@ -80,8 +80,8 @@ void MainWindow::on_action_Add_triggered()
         ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 1, new QTableWidgetItem(t.getModel()));
 
         ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 2, new QTableWidgetItem(t.getManufacturer()));
-        ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 3, new QTableWidgetItem(t.getYear()));
-        ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 4, new QTableWidgetItem(t.getMemory()));
+        ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 3, new QTableWidgetItem(t.getMemory()));
+        ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 4, new QTableWidgetItem(t.getYear()));
         //ui->tableWidget->item(ui->tableWidget->rowCount() - 1, 4)->setTextColor(FunctionComment);
         main_vector.push_back(t);
         ui->statusBar->showMessage("Запись добавлена");
@@ -139,7 +139,7 @@ void MainWindow::on_action_Edit_triggered()
 
 void MainWindow::on_action_Delete_triggered()
 {
-    auto list = ui->tableWidget->selectionModel()->selectedRows();
+    auto list = ui->tableWidget->selectionModel()->selectedRows(); // можно выбрать несколько зажав ctrl
     if (list.size() > 0) {
         QMessageBox msgBox;
         msgBox.setWindowTitle("Внимание");
@@ -231,23 +231,28 @@ void MainWindow::on_action_Save_triggered()
         MainWindow::on_action_SaveAs_triggered();
         return;
     }
+
     QFile file(file_);
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream out(&file);
         int len = ui->tableWidget->rowCount();
+
         for (int i = 0; i < len; ++i) {
             QString name = ui->tableWidget->item(i, 0)->text();
             QString model = ui->tableWidget->item(i, 1)->text();
             QString manufacturer = ui->tableWidget->item(i, 2)->text();
             QString memory = ui->tableWidget->item(i, 3)->text();
             QString year = ui->tableWidget->item(i, 4)->text();
+
             out << name << ";" << model << ";" << manufacturer << ";" << memory << ";" << year << "\n";
         }
+
         file.close();
         ui->statusBar->showMessage("Файл записан");
         setWindowTitle(file_ + " – характеристики смартфона");
     }
 }
+
 
 void MainWindow::on_action_SaveAs_triggered()
 {
@@ -277,7 +282,7 @@ void MainWindow::on_action_ShowData_triggered()
     Show_Data myDialog;
     QString s;
     for (auto &k : main_vector) {
-        s += k.getName() + ";" + k.getModel() + ";"  +  k.getManufacturer() + k.getMemory() + k.getYear() + "\n";
+        s += k.getName() + "; " + k.getModel() + "; "  +  k.getManufacturer() + "; " + k.getMemory() + "; " + k.getYear() + "; \n";
     }
     myDialog.setText(s);
     myDialog.exec();

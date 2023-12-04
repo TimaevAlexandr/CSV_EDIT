@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>Добавление смартфона</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
